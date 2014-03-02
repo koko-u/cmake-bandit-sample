@@ -15,21 +15,21 @@ set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
 #----------------------------------------
 # Module source
 #----------------------------------------
-set(PROJECT_LIB_NAME ${PROJECT_NAME_STR}_impl)
+set(PROJECT_LIB_NAME ${PROJECT_NAME_STR}Lib)
 
 include_directories(${COMMON_INCLUDES})
-file(GLOB SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
+file(GLOB_RECURSE SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 add_library(${PROJECT_LIB_NAME} ${SRC_FILES})
 
 #----------------------------------------
 # Test
 #----------------------------------------
 enable_testing()
-set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
+set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}Test)
 set(BANDIT_ROOT_DIR ${EXT_PROJECTS_DIR}/bandit)
 include_directories(${BANDIT_ROOT_DIR} ${COMMON_INCLUDES})
 
-file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
+file(GLOB_RECURSE TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
 add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
 target_link_libraries(${PROJECT_TEST_NAME} ${PROJECT_LIB_NAME})
 
@@ -38,3 +38,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 add_test(test1 ${PROJECT_TEST_NAME})
+
+#----------------------------------------
+# Application
+#----------------------------------------
+set(APPLICATION_NAME ${PROJECT_NAME_STR})
+add_executable(${APPLICATION_NAME} main.cpp)
+target_link_libraries(${APPLICATION_NAME} ${PROJECT_LIB_NAME})
+install(TARGETS ${APPLICATION_NAME} DESTINATION ${PROJECT_SOURCE_DIR}/bin)
