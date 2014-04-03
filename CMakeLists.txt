@@ -46,3 +46,18 @@ set(APPLICATION_NAME ${PROJECT_NAME_STR})
 add_executable(${APPLICATION_NAME} main.cpp)
 target_link_libraries(${APPLICATION_NAME} ${PROJECT_LIB_NAME})
 install(TARGETS ${APPLICATION_NAME} DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+
+#----------------------------------------
+# Doxygen
+#----------------------------------------
+option(BUILD_DOC "Use Doxygen to create the HTML based API documentation" OFF)
+if(BUILD_DOC)
+  FIND_PACKAGE(Doxygen)
+  if(NOT DOXYGEN_FOUND)
+    message(FATAL_ERROR "Doxygen is needed to build documentation. Please install it")
+  endif()
+  configure_file(Doxyfile.in ${PROJECT_BINARY_DIR}/Doxyfile @ONLY IMMEDIATE)
+  add_custom_target(doc ALL
+    COMMAND ${DOXYGEN_EXECUTABLE} ${PROJECT_BINARY_DIR}/Doxyfile
+    SOURCES ${PROJECT_BINARY_DIR}/Doxyfile)
+endif()
