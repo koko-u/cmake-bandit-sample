@@ -2,8 +2,21 @@ cmake_minimum_required(VERSION 2.8)
 set(PROJECT_NAME_STR sample_fraction)
 project(${PROJECT_NAME_STR} C CXX)
 
+#----------------------------------------
+# set compiler
+#----------------------------------------
+set(CMAKE_C_COMPILER "/usr/bin/clang")
+set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+
 if(CMAKE_COMPILER_IS_GNUCXX)
-  add_definitions(-Wall --std=c++11 -pthread)
+  add_definitions(-Wall -std=c++11 -pthread)
+endif()
+
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+  add_definitions(-pedantic -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -std=c++11)
+  include_directories(/usr/local/include/c++/v1)
+  link_directories(/usr/local/lib)
+  link_libraries(c++)
 endif()
 
 #----------------------------------------
